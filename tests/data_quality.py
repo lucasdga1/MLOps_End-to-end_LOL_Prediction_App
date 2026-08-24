@@ -66,4 +66,4 @@ def validate_data(path: str):
         print("✅ All checks passed!")
 
 if __name__ == "__main__":
-    validate_data("src/data/cleaned/df_limpo.csv")
+    validate_data("data/cleaned/LOL_limpo.csv")

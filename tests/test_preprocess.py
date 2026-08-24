@@ -9,7 +9,7 @@ from src.feature_pipeline.load_preprocess import load_and_preprocess
 Test to confirm te pipeline works
 """
 def test_load_and_preprocess(tmp_path):
-    raw = pd.read_csv("src/data/raw/Base_LOL.csv")
+    raw = pd.read_csv("data/raw/base_lol.csv")
     raw_path = tmp_path / "raw.csv"
     raw.to_csv(raw_path, index=False)
 
