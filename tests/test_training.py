@@ -33,7 +33,6 @@ def test_train_creates_model_and_metrics(tmp_path):
     'gamma': 5,
     'reg_alpha': 5,
     'reg_lambda': 5},
-        sample_frac=0.02
     )
     assert out_path.exists()
     _assert_metrics(metrics)
@@ -48,7 +47,6 @@ def test_eval_works_with_saved_model(tmp_path):
         train_path=TRAIN_PATH,
         model_output=model_path,
         model_params={"n_estimators": 20},
-        sample_frac=0.02,
     )
     metrics = evaluate_model(model_path=model_path, sample_frac=0.02 )
     _assert_metrics(metrics)
