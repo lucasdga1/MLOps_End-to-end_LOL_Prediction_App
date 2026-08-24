@@ -13,7 +13,7 @@ def test_load_and_preprocess(tmp_path):
     raw_path = tmp_path / "raw.csv"
     raw.to_csv(raw_path, index=False)
 
-    df_limpo = load_and_preprocess(raw_path=str(raw_path), output_dir=tmp_path)
+    df_limpo = load_and_preprocess(raw_data=raw, output_dir=tmp_path)
 
     processed_dir = tmp_path / "processed"
     processed_dir.mkdir(exist_ok=True)
