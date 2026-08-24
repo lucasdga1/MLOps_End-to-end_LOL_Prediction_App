@@ -41,11 +41,7 @@ jobs:
 
             # Build dos containers
             - name: Build Docker images
-              run: |
-                docker build -t postgres ./postgres
-                docker build -t mlflow ./mlflow
-                docker build -t airflow ./airflow
-                docker build -t api ./api
+              run: docker compose build
 
             # Teste streamlit
             - name: Test Streamlit app
