@@ -16,7 +16,7 @@ from src.inference_pipeline.inference import predict
 @pytest.fixture(scope="session")
 def sample_df():
     # Load a small sample from cleaning folder
-    sample_path = ROOT / "src/data/cleaned/LOL_limpo.csv"
+    sample_path = ROOT / "data/cleaned/LOL_limpo.csv"
     df = pd.read_csv(sample_path).sample(n=5, random_state=42).reset_index(drop=True)
     return df
 
@@ -24,6 +24,9 @@ def test_inference_runs_and_returns_predictions(sample_df):
     # Ensure inference pipeline runs and returns predicted winner
     if "gameId" in sample_df.columns:
         sample_df = sample_df.drop(columns=["gameId"])
+
+
+
     preds_df = predict(sample_df)
 
     # Check output is not empty

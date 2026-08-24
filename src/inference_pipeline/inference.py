@@ -28,7 +28,7 @@ print("📂 Inference using project root:", PROJECT_ROOT)
 
 if DEFAULT_TRAIN.exists():
     _train_cols = pd.read_csv(DEFAULT_TRAIN, nrows=1)
-    TRAIN_FEATURE_COLUMNS = [c for c in _train_cols.columns if c != "blueWins"]  # excluding target column
+    TRAIN_FEATURE_COLUMNS = [c for c in _train_cols.columns if c != ["blueWins", "gameId"]]  # excluding target column
 else:
     TRAIN_FEATURE_COLUMNS = None
 
@@ -44,6 +44,9 @@ def predict(
 
     # Separate actuals if present
     y_true = None
+    if TRAIN_FEATURE_COLUMNS is not None:
+        df = df.reindex(columns=TRAIN_FEATURE_COLUMNS, fill_value=0)
+
     if "blueWins" in df.columns:
         y_true = df["blueWins"].tolist()
         df = df.drop(columns=["blueWins"])
@@ -52,9 +55,6 @@ def predict(
     if "gameId" in df.columns:
         df = df.drop(columns=["gameId"])
 
-
-    if TRAIN_FEATURE_COLUMNS is not None:
-        df = df.reindex(columns=TRAIN_FEATURE_COLUMNS, fill_value=0)
 
     # Load model and predict
     model = load(model_path)
