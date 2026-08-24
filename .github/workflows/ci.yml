@@ -13,13 +13,13 @@ jobs:
         steps:
             # setup dos environments
             - name: Set environment variables
-            - run: |
+              run: |
                 echo "${{ secrets.CRED_ENV }}" > cred.env
                 echo "${{ secrets.GCP_KEY }}" > gcp-key.json
 
             # Checkout do código
             - name: Checkout repository
-              uses: actions/ checkout@v3
+              uses: actions/checkout@v3
 
             # Configurar Python
             - name: Set up Python
