@@ -10,7 +10,7 @@ from src.training_pipeline.train import train_model
 from src.training_pipeline.eval import evaluate_model
 from src.training_pipeline.tune import tune_model
 
-TRAIN_PATH = Path("D:/PyCharm 2026.1.4/Projeto_LOL/data/cleaned/LOL_limpo.csv")
+TRAIN_PATH = Path("data/cleaned/LOL_limpo.csv")
 
 # Ensure we have the same keys in metrics dict
 def _assert_metrics(m):
