@@ -12,8 +12,8 @@ from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, recall_score
 
-DEFAULT_PATH = Path("D:/PyCharm 2026.1.4/Projeto_LOL/src/data/cleaned/LOL_limpo.csv")
-DEFAULT_OUT = Path("D:/PyCharm 2026.1.4/Projeto_LOL/models/xgb_model.pkl")
+DEFAULT_PATH = Path("data/cleaned/LOL_limpo.csv")
+DEFAULT_OUT = Path("models/xgb_model.pkl")
 
 
 
