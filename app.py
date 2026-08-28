@@ -12,16 +12,16 @@ import json
 """
 Trocar pela url do Railway (requests.post("https://.../predict", json=data)
 """
-"""
-Para converter csv em json e fazer a predict
+
+# Para converter csv em json e fazer a predict
 
 uploaded_file = st.file_uploader("Upload CSV", type="csv")
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     data = df.to_dict(orient="records")  # lista de dicts
-    response = requests.post("http://localhost:8000/predict", json=data)
+    response = requests.post("https://lol-prediction-prodution.up.railway.app/predict", json=data)
     st.write(response.json())
-"""
+
 # ===================================
 # UI
 # ===================================
