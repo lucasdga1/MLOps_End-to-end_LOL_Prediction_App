@@ -21,7 +21,7 @@ services:
       - ./data:/opt/airflow/dags/data
       - ./models:/opt/airflow/dags/models
       - ./gcp-key.json:/opt/airflow/gcp-key.json:ro
-      - ./requirements.txt:/requirements.txt
+      - ./requirements_d.txt:/requirements.txt
       - ./src:/opt/airflow/dags/src
       - mlflow_data:/mlflow
 
@@ -37,7 +37,7 @@ services:
       - ./data:/opt/airflow/dags/data
       - ./models:/opt/airflow/dags/models
       - ./gcp-key.json:/opt/airflow/gcp-key.json:ro
-      - ./requirements.txt:/requirements.txt
+      - ./requirements_d.txt:/requirements.txt
       - ./src:/opt/airflow/dags/src
       - mlflow_data:/mlflow
     ports:
@@ -56,7 +56,7 @@ services:
       - ./data:/opt/airflow/dags/data
       - ./models:/opt/airflow/dags/models
       - ./gcp-key.json:/opt/airflow/gcp-key.json:ro
-      - ./requirements.txt:/requirements.txt
+      - ./requirements_d.txt:/requirements.txt
       - ./src:/opt/airflow/dags/src
       - mlflow_data:/mlflow
     command: scheduler
