@@ -40,8 +40,6 @@ services:
       - ./requirements_d.txt:/requirements.txt
       - ./src:/opt/airflow/dags/src
       - mlflow_data:/mlflow
-    ports:
-      - "8080:8080"
     command: webserver
 
   airflow-scheduler:
@@ -64,8 +62,6 @@ services:
   mlflow:
     image: ghcr.io/mlflow/mlflow:v2.16.0
     container_name: mlflow_server
-    ports:
-      - "5000:5000"
     environment:
       - BACKEND_URI=sqlite:///mlflow.db
       - ARTIFACT_ROOT=/mlflow/artifacts
