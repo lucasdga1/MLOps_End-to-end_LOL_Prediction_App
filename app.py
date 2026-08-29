@@ -26,10 +26,19 @@ if uploaded_file is not None:
     if st.button("Show prediction🚀"):
         st.write("📅 Running prediction for the match")
         response = requests.post("https://lol-prediction-prodution.up.railway.app/predict", json=data)
-        results = response.json()["results"]
-        for r in results:
-            if r["predicted_winner"] == 1:
-                st.write("**:blue[Blue team won!]**")
+        if response.status_code != 200:
+            st.error(f"Erro na API: {response.status_code}")
+            st.write(response.text)
+        else:
+            response_json = response.json()
+            results = response_json.get("results")
+            if results is None:
+                st.error("Resposta da API não contém 'results'.")
+                st.write(response_json)
             else:
-                st.write("**:red[Red team won!]**")
+                for r in results:
+                    if r["predicted_winner"] == 1:
+                        st.write("**:blue[Blue team won!]**")
+                    else:
+                        st.write("**:red[Red team won!]**")
 
