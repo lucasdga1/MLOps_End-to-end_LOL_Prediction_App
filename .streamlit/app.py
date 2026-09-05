@@ -12,7 +12,7 @@ import requests
 # ===================================
 st.title("LOL match prediction model 🎮")
 st.markdown(
-    "<div style='text-align: center;'><img src='Graficos_projeto/league-of-legends7103.jpg' width='150'></div>",
+    "<div style='text-align: center;'><img src='.streamlit/league-of-legends7103.jpg' width='150'></div>",
     unsafe_allow_html=True
 )
 """
@@ -25,7 +25,7 @@ if uploaded_file is not None:
     data = df.to_dict(orient="records")  # lista de dicts
     if st.button("Show prediction🚀"):
         st.write("📅 Running prediction for the match")
-        response = requests.post("https://lol-prediction-prodution.up.railway.app/predict", json=data)
+        response = requests.post("http://localhost:8000/predict", json=data)
         if response.status_code != 200:
             st.error(f"Erro na API: {response.status_code}")
             st.write(response.text)

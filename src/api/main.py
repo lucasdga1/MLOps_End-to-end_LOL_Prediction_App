@@ -3,17 +3,14 @@ from pathlib import Path
 import time
 from typing import List, Dict, Any     # For type hints (clarity in endpoints)
 import pandas as pd
-import os
 import mlflow.pyfunc
 import mlflow
+import joblib
 
+# Load model
+MODEL_PATH = Path("./models/xgb_best_model.pkl")
 
-# Load model from mlflow
-MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5000")
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-MODEL_URI = os.getenv("MODEL_URI", "models:/xgb_lol_model/latest")
-
-model = None
+model = joblib.load(MODEL_PATH)
 
 TRAIN_FE_PATH = Path("./data/cleaned/LOL_limpo.csv")
 
@@ -29,20 +26,6 @@ else:
 # App
 # ---------------------------------
 app = FastAPI(title="LOL prediction API")
-@app.on_event("startup")
-def load_model_on_startup():
-    global model, TRAIN_FEATURE_COLUMNS
-    max_tries = 10
-    for i in range(max_tries):
-        try:
-            model = mlflow.pyfunc.load_model(MODEL_URI)
-            print("Model loaded from", MODEL_URI)
-            break
-        except Exception as e:
-            print(f"Attempt {i+1}/{max_tries} - model not ready: {e}")
-            time.sleep(2)
-    if model is None:
-        raise RuntimeError("Failed to load model at startup")
 
 @app.get("/")
 def root():
@@ -51,7 +34,7 @@ def root():
 # /health -> checks if model exists, returns status info
 @app.get("/health")
 def health():
-    status: Dict[str, Any] = {"model_path": MODEL_URI}
+    status: Dict[str, Any] = {"model_path": MODEL_PATH}
     if model is not None:
         status["status"] = "healthy"
         # opcional: mostrar quantas features são esperadas
@@ -69,11 +52,6 @@ def predict(data: List[Dict]):
     if df.empty:
         return { "error": "No data found" }
 
-    y_true = None
-    if "blueWins" in df.columns:
-        y_true = df["blueWins"].tolist()
-        df = df.drop(columns=["blueWins"])
-
     EXPECTED_FEATURE_ORDER = [
         "redExperienceDiff", "blueGoldPerMin", "blueExperienceDiff",
         "redEliteMonsters", "blueFirstBlood", "blueCSPerMin",
@@ -89,6 +67,11 @@ def predict(data: List[Dict]):
         "redTotalGold"
     ]
     df = df.reindex(columns=EXPECTED_FEATURE_ORDER, fill_value=0)
+
+    y_true = None
+    if "blueWins" in df.columns:
+        y_true = df["blueWins"].tolist()
+        df = df.drop(columns=["blueWins"])
 
     df = df.dropna()
 
