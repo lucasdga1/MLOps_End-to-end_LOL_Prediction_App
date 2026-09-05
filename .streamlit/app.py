@@ -25,7 +25,7 @@ if uploaded_file is not None:
     data = df.to_dict(orient="records")  # lista de dicts
     if st.button("Show prediction🚀"):
         st.write("📅 Running prediction for the match")
-        response = requests.post("http://localhost:8000/predict", json=data)
+        response = requests.post("https://mlops-end-to-end-lol-prediction-app.onrender.com/predict", json=data)
         if response.status_code != 200:
             st.error(f"Erro na API: {response.status_code}")
             st.write(response.text)
