@@ -29,7 +29,7 @@ a partir de dados estatísticos da partida.
 * **Optuna**: Biblioteca de ajuste de hiperparâmetros;
 * **SHAP**: Biblioteca que mostra o quanto cada variável influencia modelo;
 * **FastAPI**: Framework responsável por criar APIs;
-* **Railway**: Plataforma para publicação de API, sites e apps;
+* **Render**: Plataforma para publicação de API, sites e apps;
 * **Streamlit**: Framework para a criação de web apps interativos.
 * **Github Actions**: Responsável pelo Continuous integration.
 
@@ -47,7 +47,7 @@ a partir de dados estatísticos da partida.
 11. O arquivo de API foi criado no Docker para poder consumir o modelo mais atualizado;
 12. O app foi criado usando Streamlit;
 13. Foi feito o CI via Github Actions;
-14. A API foi exposta com Railway;
+14. A API foi exposta com Render;
 15. O app foi publicado no streamlit.io
 
 

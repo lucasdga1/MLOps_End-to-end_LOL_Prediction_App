@@ -12,7 +12,7 @@ import requests
 # ===================================
 st.title("LOL match prediction model 🎮")
 st.markdown(
-    "<div style='text-align: center;'><img src='.streamlit/league-of-legends7103.jpg' width='150'></div>",
+    "<div style='text-align: center;'><img src='league-of-legends7103.jpg' width='150'></div>",
     unsafe_allow_html=True
 )
 """
