@@ -59,7 +59,7 @@ def predict_endpoint(data: List[Dict]):
             "predicted_winner": int(row["predicted_winner"])
         }
 
-        if "actual_winner" in row:
+        if "actual_winner" in row and pd.notnull(row["actual_winner"]):
             result["actual_winner"] = int(row["actual_winner"])
         results.append(result)
 
