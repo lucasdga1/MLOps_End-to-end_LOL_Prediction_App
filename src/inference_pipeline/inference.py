@@ -21,14 +21,14 @@ from src.feature_pipeline.load_preprocess import load_and_preprocess
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_MODEL = PROJECT_ROOT / "models" / "xgb_best_model.pkl"
-DEFAULT_TRAIN = PROJECT_ROOT / "src" / "data" / "raw" / "Base_LOL.csv"
+DEFAULT_TRAIN = PROJECT_ROOT / "data" / "cleaned" / "LOL_limpo.csv"
 DEFAULT_OUTPUT = PROJECT_ROOT / "predictions.csv"
 
 print("📂 Inference using project root:", PROJECT_ROOT)
 
 if DEFAULT_TRAIN.exists():
     _train_cols = pd.read_csv(DEFAULT_TRAIN, nrows=1)
-    TRAIN_FEATURE_COLUMNS = [c for c in _train_cols.columns if c != ["blueWins", "gameId"]]  # excluding target column
+    TRAIN_FEATURE_COLUMNS = [c for c in _train_cols.columns if c not in ["blueWins", "gameId"]]  # excluding target column
 else:
     TRAIN_FEATURE_COLUMNS = None
 
@@ -61,10 +61,10 @@ def predict(
     preds = model.predict(df)
 
     # Build output
-    out = df.copy()
-    out["predicted_winner"] = preds
-    if y_true is not None:
-        out["actual_winner"] = y_true
+    out = pd.DataFrame({
+        "predicted_winner": preds,
+        "actual_winner": y_true if y_true is not None else None
+    })
 
     return out
 
@@ -87,5 +87,3 @@ if __name__ == "__main__":
         model_path=args.model,
     )
 
-    preds_df.to_csv(args.output, index=False)
-    print(f"✅ Predictions saved to {args.output}")

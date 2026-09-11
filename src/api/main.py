@@ -1,11 +1,9 @@
 from fastapi import FastAPI               # Web framework for APIs
 from pathlib import Path
-import time
 from typing import List, Dict, Any     # For type hints (clarity in endpoints)
 import pandas as pd
-import mlflow.pyfunc
-import mlflow
 import joblib
+from src.inference_pipeline.inference import predict
 
 # Load model
 MODEL_PATH = Path("./models/xgb_best_model.pkl")
@@ -47,46 +45,22 @@ def health():
 
 # Prediction Endpoint
 @app.post("/predict")
-def predict(data: List[Dict]):
+def predict_endpoint(data: List[Dict]):
     df = pd.DataFrame(data)
     if df.empty:
         return { "error": "No data found" }
 
-    EXPECTED_FEATURE_ORDER = [
-        "redExperienceDiff", "blueGoldPerMin", "blueExperienceDiff",
-        "redEliteMonsters", "blueFirstBlood", "blueCSPerMin",
-        "redAvgLevel", "blueWardsPlaced", "blueAvgLevel", "blueDragons",
-        "redTotalJungleMinionsKilled", "redDeaths", "redKills", "redAssists",
-        "redTowersDestroyed", "blueDeaths", "redDragons", "blueTotalExperience",
-        "blueTowersDestroyed", "redCSPerMin", "blueKills", "redGoldDiff",
-        "redWardsPlaced", "redWardsDestroyed", "blueAssists",
-        "redTotalMinionsKilled", "redGoldPerMin", "redHeralds",
-        "blueTotalJungleMinionsKilled", "blueTotalMinionsKilled",
-        "blueWardsDestroyed", "blueTotalGold", "blueEliteMonsters",
-        "redFirstBlood", "redTotalExperience", "blueHeralds", "blueGoldDiff",
-        "redTotalGold"
-    ]
-    df = df.reindex(columns=EXPECTED_FEATURE_ORDER, fill_value=0)
-
-    y_true = None
-    if "blueWins" in df.columns:
-        y_true = df["blueWins"].tolist()
-        df = df.drop(columns=["blueWins"])
-
-    df = df.dropna()
-
-
-    preds = model.predict(df)
+    preds_df = predict(df, model_path=MODEL_PATH)
 
     results = []
-    for i, row in df.iterrows():
+    for i, row in preds_df.iterrows():
         result = {
-            "features": row.to_dict(),
-            "predicted_winner": int(preds[i])
+            "features": row.drop(["predicted_winner", "actual_winner"], errors="ignore").to_dict(),
+            "predicted_winner": int(row["predicted_winner"])
         }
 
-        if y_true is not None:
-            result["actual_winner"] = int(y_true[i])
+        if "actual_winner" in row:
+            result["actual_winner"] = int(row["actual_winner"])
         results.append(result)
 
     return {"results": results}

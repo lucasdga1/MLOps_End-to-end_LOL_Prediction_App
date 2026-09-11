@@ -11,13 +11,10 @@ import requests
 # UI
 # ===================================
 st.title("LOL match prediction model 🎮")
-st.markdown(
-    "<div style='text-align: center;'><img src='league-of-legends7103.jpg' width='150'></div>",
-    unsafe_allow_html=True
+st.image(
+    'league-of-legends7103.jpg', width='150'
 )
-"""
-Para converter csv em json e fazer a predict
-"""
+
 st.header("Upload the match data as csv")
 uploaded_file = st.file_uploader("Upload CSV", type="csv")
 if uploaded_file is not None:
@@ -30,15 +27,19 @@ if uploaded_file is not None:
             st.error(f"Erro na API: {response.status_code}")
             st.write(response.text)
         else:
-            response_json = response.json()
-            results = response_json.get("results")
-            if results is None:
-                st.error("Resposta da API não contém 'results'.")
-                st.write(response_json)
-            else:
-                for r in results:
-                    if r["predicted_winner"] == 1:
-                        st.write("**:blue[Blue team won!]**")
+            st.subheader("Results:")
+            results = response.json()["results"]
+            for idx, r in enumerate(results, start=1):
+                st.write(f"**Match {idx}:**")
+                if r["predicted_winner"] == 1:
+                    st.write("**:blue[Blue team predicted to win!]**")
+                else:
+                    st.write("**:red[Red team predicted to win!]**")
+
+                if "actual_winner" in r:
+                    if r["actual_winner"] == 1:
+                        st.write("Actual: :blue[Blue team won]")
                     else:
-                        st.write("**:red[Red team won!]**")
+                        st.write("Actual: :red[Red team won]")
+                st.markdown("---")
 
