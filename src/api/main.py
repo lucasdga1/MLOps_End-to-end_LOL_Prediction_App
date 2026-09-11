@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, Dict, Any     # For type hints (clarity in endpoints)
 import pandas as pd
 import joblib
-from src.inference_pipeline.inference import predict
+from inference_pipeline.inference import predict
 
 # Load model
 MODEL_PATH = Path("./models/xgb_best_model.pkl")
