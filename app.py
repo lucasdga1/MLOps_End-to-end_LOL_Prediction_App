@@ -12,7 +12,7 @@ import requests
 # ===================================
 st.title("LOL match prediction model 🎮")
 st.image(
-    'league-of-legends7103.jpg', width='150'
+    'league-of-legends7103.jpg', width=150
 )
 
 st.header("Upload the match data as csv")
