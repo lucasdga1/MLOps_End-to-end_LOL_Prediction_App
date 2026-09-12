@@ -8,7 +8,7 @@ a partir de dados estatísticos da partida.
 # Dataset e Códigos
 * O dataset foi fornecido pela EBAC como desafio acadêmico do último módulo do curso profissionalizante.
 * Os dados para testar no app podem ser encontrados na pasta `src/match/app_test.csv`
-    * Para fazer o teste com outras partidas, você pode usar o arquivo `src/match/scrape.ipynb`. Alterando a a linha do dataset escolhido para a partida desejada.
+    * Para fazer o teste com outras partidas, você pode usar o arquivo `src/match/scrape.ipynb`. Alterando a linha do dataset escolhido para a partida desejada.
 * Os códigos dos notebooks utilizados estão na pasta `notebooks`
 * Os códigos das funções utilizadas estão em `src`:
     * `src/api` o arquivo do FastAPI para o backend do app;
