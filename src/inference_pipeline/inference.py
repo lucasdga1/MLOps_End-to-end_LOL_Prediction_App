@@ -40,7 +40,8 @@ def predict(
     model_path: Path | str = DEFAULT_MODEL,
 ) -> pd.DataFrame:
     # Preprocess and clean
-    df = load_and_preprocess(input_df)
+    # Prediction inputs do not need to be persisted to the Airflow data path.
+    df = load_and_preprocess(input_df, output_dir=None)
 
     # Separate actuals if present
     y_true = None
@@ -86,4 +87,3 @@ if __name__ == "__main__":
         raw_df,
         model_path=args.model,
     )
-

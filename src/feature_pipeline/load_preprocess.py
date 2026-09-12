@@ -9,7 +9,7 @@ DATA_DIR = Path("/opt/airflow/dags/data/cleaned")
 
 def load_and_preprocess(
         raw_data: pd.DataFrame,
-        output_dir: Path | str = DATA_DIR,
+        output_dir: Path | str | None = DATA_DIR,
 ):
     # Load dataset
     if not isinstance(raw_data, pd.DataFrame):
@@ -23,11 +23,11 @@ def load_and_preprocess(
 
 
     # Save
-    outdir = Path(output_dir)
-    outdir.mkdir(parents=True, exist_ok=True)
-    df.to_csv(outdir / "LOL_limpo.csv", index=False)
-
-    print(f"✅ Data processing completed (saved to {outdir}).")
+    if output_dir is not None:
+        outdir = Path(output_dir)
+        outdir.mkdir(parents=True, exist_ok=True)
+        df.to_csv(outdir / "LOL_limpo.csv", index=False)
+        print(f"✅ Data processing completed (saved to {outdir}).")
     print(f"Processed Data: {df.shape}")
 
     return df

@@ -19,7 +19,7 @@ st.header("Upload the match data as csv")
 uploaded_file = st.file_uploader("Upload CSV", type="csv")
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
-    data = df.to_dict(orient="records")  # lista de dicts
+    data = df.to_dict(orient="records")
     if st.button("Show prediction🚀"):
         st.write("📅 Running prediction for the match")
         response = requests.post("https://mlops-end-to-end-lol-prediction-app.onrender.com/predict", json=data)
@@ -42,4 +42,3 @@ if uploaded_file is not None:
                     else:
                         st.write("Actual: :red[Red team won]")
                 st.markdown("---")
-

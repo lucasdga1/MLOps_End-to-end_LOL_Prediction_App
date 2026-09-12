@@ -1,23 +1,21 @@
 from fastapi import FastAPI               # Web framework for APIs
-from pathlib import Path
 from typing import List, Dict, Any     # For type hints (clarity in endpoints)
 import pandas as pd
-import joblib
-from src.inference_pipeline.inference import predict
+from joblib import load
+from src.inference_pipeline.inference import (
+    DEFAULT_MODEL,
+    TRAIN_FEATURE_COLUMNS,
+    predict,
+)
 
-# Load model
-MODEL_PATH = Path("./models/xgb_best_model.pkl")
+MODEL_PATH = DEFAULT_MODEL
+model = None
+model_load_error = None
 
-model = joblib.load(MODEL_PATH)
-
-TRAIN_FE_PATH = Path("./data/cleaned/LOL_limpo.csv")
-
-# Expected columns for alignment
-if TRAIN_FE_PATH.exists():
-    _train_cols = pd.read_csv(TRAIN_FE_PATH, nrows=1)
-    TRAIN_FEATURE_COLUMNS = [c for c in _train_cols.columns if c != "blueWins"]
-else:
-    TRAIN_FEATURE_COLUMNS = None
+try:
+    model = load(MODEL_PATH)
+except Exception as exc:
+    model_load_error = str(exc)
 
 
 # ---------------------------------
@@ -32,15 +30,20 @@ def root():
 # /health -> checks if model exists, returns status info
 @app.get("/health")
 def health():
-    status: Dict[str, Any] = {"model_path": MODEL_PATH}
+    status: Dict[str, Any] = {
+        "model_path": str(MODEL_PATH),
+        "model_loaded": model is not None,
+        "n_features_expected": (
+            len(TRAIN_FEATURE_COLUMNS)
+            if TRAIN_FEATURE_COLUMNS is not None
+            else None
+        ),
+    }
     if model is not None:
         status["status"] = "healthy"
-        # opcional: mostrar quantas features são esperadas
-        if TRAIN_FEATURE_COLUMNS:
-            status["n_features_expected"] = len(TRAIN_FEATURE_COLUMNS)
     else:
         status["status"] = "unhealthy"
-        status["error"] = "Model not loaded"
+        status["error"] = model_load_error or "Model not loaded"
     return status
 
 # Prediction Endpoint
@@ -50,7 +53,7 @@ def predict_endpoint(data: List[Dict]):
     if df.empty:
         return { "error": "No data found" }
 
-    preds_df = predict(df, model_path=MODEL_PATH)
+    preds_df = predict(df)
 
     results = []
     for i, row in preds_df.iterrows():
