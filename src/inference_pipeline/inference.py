@@ -44,13 +44,9 @@ def predict(
     df = load_and_preprocess(input_df, output_dir=None)
 
     # Separate actuals if present
-    y_true = None
+    y_true = df["blueWins"].tolist() if "blueWins" in df.columns else None
     if TRAIN_FEATURE_COLUMNS is not None:
         df = df.reindex(columns=TRAIN_FEATURE_COLUMNS, fill_value=0)
-
-    if "blueWins" in df.columns:
-        y_true = df["blueWins"].tolist()
-        df = df.drop(columns=["blueWins"])
 
     # Remove gameId if exists
     if "gameId" in df.columns:

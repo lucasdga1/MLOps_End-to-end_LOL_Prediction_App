@@ -30,15 +30,34 @@ if uploaded_file is not None:
             st.subheader("Results:")
             results = response.json()["results"]
             for idx, r in enumerate(results, start=1):
-                st.write(f"**Match {idx}:**")
+                st.markdown(
+                    f"<p style='font-size:24px'><strong>Match {idx}:</strong></p>",
+                    unsafe_allow_html=True,
+                )
                 if r["predicted_winner"] == 1:
-                    st.write("**:blue[Blue team predicted to win!]**")
+                    st.markdown(
+                        "<p style='font-size:24px; color:blue'><strong>"
+                        "Blue team predicted to win!</strong></p>",
+                        unsafe_allow_html=True,
+                    )
                 else:
-                    st.write("**:red[Red team predicted to win!]**")
+                    st.markdown(
+                        "<p style='font-size:24px; color:red'><strong>"
+                        "Red team predicted to win!</strong></p>",
+                        unsafe_allow_html=True,
+                    )
 
                 if "actual_winner" in r:
                     if r["actual_winner"] == 1:
-                        st.write("Actual: :blue[Blue team won]")
+                        st.markdown(
+                            "<p style='font-size:24px; color:blue'><strong>"
+                            "Actual: Blue team won</strong></p>",
+                            unsafe_allow_html=True,
+                        )
                     else:
-                        st.write("Actual: :red[Red team won]")
+                        st.markdown(
+                            "<p style='font-size:24px; color:red'><strong>"
+                            "Actual: Red team won</strong></p>",
+                            unsafe_allow_html=True,
+                        )
                 st.markdown("---")

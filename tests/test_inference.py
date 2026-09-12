@@ -38,6 +38,7 @@ def test_inference_runs_and_returns_predictions(sample_df):
 
     # Predictions should be numeric
     assert pd.api.types.is_numeric_dtype(preds_df["predicted_winner"])
+    assert preds_df["actual_winner"].tolist() == sample_df["blueWins"].tolist()
 
     print("✅ Inference pipeline test passed. Predictions:")
     print(preds_df[["predicted_winner"]].head())
