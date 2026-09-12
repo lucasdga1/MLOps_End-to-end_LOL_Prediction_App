@@ -25,8 +25,9 @@ import mlflow.xgboost
 from mlflow.tracking import MlflowClient
 from mlflow.exceptions import MlflowException
 
-DEFAULT_PATH = Path ("/opt/airflow/dags/data/cleaned/LOL_limpo.csv")
-DEFAULT_OUT = Path("/opt/airflow/dags/models/xgb_best_model.pkl")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_PATH = PROJECT_ROOT / "data" / "cleaned" / "LOL_limpo.csv"
+DEFAULT_OUT = PROJECT_ROOT / "models" / "xgb_best_model.pkl"
 
 
 def _maybe_sample(df: pd.DataFrame, sample_frac: Optional[float], random_state: int) -> pd.DataFrame:
@@ -123,7 +124,7 @@ def tune_model(
         mlflow.log_metrics(best_metrics)
         mlflow.xgboost.log_model(best_model, artifact_path="model")
 
-        tcols = pd.read_csv(DEFAULT_PATH, nrows=1)
+        tcols = pd.read_csv(train_path, nrows=1)
         features = list(tcols.columns)
         with open ("features.json", "w") as f:
             json.dump(features, f)
